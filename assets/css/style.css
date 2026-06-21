@@ -1,0 +1,712 @@
+/* ============================================
+   UNDANGAN DIGITAL - MAIN STYLES
+   Ganti shape geometri dengan gambar PNG asli
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #1a0a2e;
+  font-family: 'Georgia', serif;
+}
+
+/* ============================================
+   SCENE WRAPPER
+   ============================================ */
+#scene {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ============================================
+   BACKGROUND LAYER
+   Ganti background-color dengan background-image
+   ============================================ */
+#bg-layer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #0d051a 0%, #1a0a2e 40%, #2d1045 70%, #1a0a2e 100%);
+  /* TODO: Ganti dengan:
+     background-image: url('../assets/bg.png');
+     background-size: cover;
+     background-position: center;
+  */
+}
+
+/* Bintang / partikel background */
+#bg-layer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,200,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 15%, rgba(255,255,200,0.6) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 50% 8%, rgba(255,255,200,0.9) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 25%, rgba(255,255,200,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 12%, rgba(255,255,200,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 20% 40%, rgba(255,255,200,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 35%, rgba(255,255,200,0.6) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 90% 45%, rgba(255,255,200,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 60%, rgba(255,255,200,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 55%, rgba(255,255,200,0.5) 0%, transparent 100%);
+  animation: twinkle 3s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  0%   { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* ============================================
+   PANEL KIRI & KANAN (Pembuka Sliding)
+   Ganti background dengan PNG pohon / bunga
+   ============================================ */
+.panel {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 10;
+  overflow: hidden;
+  transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+#panel-left {
+  left: 0;
+  transform: translateX(0);
+  /* Background placeholder — ganti dengan gambar PNG panel kiri */
+  background: linear-gradient(135deg, #0d051a 0%, #1a0a2e 100%);
+}
+
+#panel-right {
+  right: 0;
+  transform: translateX(0);
+  /* Background placeholder — ganti dengan gambar PNG panel kanan */
+  background: linear-gradient(225deg, #0d051a 0%, #1a0a2e 100%);
+}
+
+/* State: panel terbuka */
+#panel-left.open  { transform: translateX(-100%); }
+#panel-right.open { transform: translateX(100%); }
+
+/* Konten dekoratif panel — shape placeholder */
+.panel-deco {
+  position: absolute;
+  inset: 0;
+}
+
+/* ============================================
+   POHON / TANAMAN DEKORATIF (Shape Placeholder)
+   Tiap .tree-* = ganti dengan <img src="../assets/tree-left.png">
+   ============================================ */
+.deco-tree {
+  position: absolute;
+  bottom: 0;
+  /* Shape: segitiga pohon */
+}
+
+/* Panel kiri - pohon */
+#panel-left .deco-tree {
+  right: -10px;
+  width: 120px;
+  height: 300px;
+  animation: sway-left 4s ease-in-out infinite;
+}
+
+#panel-left .deco-tree::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  /* Batang */
+  width: 14px;
+  height: 80px;
+  background: #3d2010;
+  border-radius: 4px;
+}
+
+#panel-left .deco-tree::after {
+  content: '';
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  /* Daun segitiga */
+  width: 0;
+  height: 0;
+  border-left: 55px solid transparent;
+  border-right: 55px solid transparent;
+  border-bottom: 240px solid #2d5a1e;
+  filter: drop-shadow(0 0 15px rgba(80,180,80,0.3));
+}
+
+/* Panel kanan - pohon mirror */
+#panel-right .deco-tree {
+  left: -10px;
+  width: 120px;
+  height: 300px;
+  animation: sway-right 4.5s ease-in-out infinite;
+}
+
+#panel-right .deco-tree::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 80px;
+  background: #3d2010;
+  border-radius: 4px;
+}
+
+#panel-right .deco-tree::after {
+  content: '';
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 55px solid transparent;
+  border-right: 55px solid transparent;
+  border-bottom: 240px solid #2d5a1e;
+  filter: drop-shadow(0 0 15px rgba(80,180,80,0.3));
+}
+
+/* Bunga-bunga kecil panel */
+.deco-flower {
+  position: absolute;
+  /* Ganti dengan gambar bunga PNG */
+}
+
+/* Panel kiri flowers */
+#panel-left .deco-flower:nth-child(1) { top: 15%; right: 20%; }
+#panel-left .deco-flower:nth-child(2) { top: 35%; right: 35%; }
+#panel-left .deco-flower:nth-child(3) { top: 60%; right: 10%; }
+
+/* Panel kanan flowers */
+#panel-right .deco-flower:nth-child(1) { top: 20%; left: 25%; }
+#panel-right .deco-flower:nth-child(2) { top: 45%; left: 15%; }
+#panel-right .deco-flower:nth-child(3) { top: 65%; left: 30%; }
+
+/* Shape bunga (lingkaran placeholder) */
+.deco-flower::before {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ff9ff3, #f368e0);
+  box-shadow: 0 0 12px rgba(243,104,224,0.5);
+  animation: bloom 3s ease-in-out infinite alternate;
+}
+
+@keyframes bloom {
+  0%   { transform: scale(1); }
+  100% { transform: scale(1.15); }
+}
+
+/* Garis dekoratif / border ornamen panel */
+.panel-border {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(255,215,0,0.3) 20%,
+    rgba(255,215,0,0.7) 50%,
+    rgba(255,215,0,0.3) 80%,
+    transparent 100%
+  );
+}
+
+#panel-left .panel-border  { right: 0; }
+#panel-right .panel-border { left: 0; }
+
+/* ============================================
+   BURUNG TERBANG (Floating Decorative Elements)
+   Ganti .bird dengan <img src="../assets/bird.png">
+   ============================================ */
+.bird {
+  position: absolute;
+  z-index: 15;
+  opacity: 0;
+  /* Shape: chevron/V sederhana */
+}
+
+.bird::before {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 6px;
+  border-top: 3px solid rgba(255,255,255,0.7);
+  border-radius: 50% 50% 0 0 / 8px 8px 0 0;
+  /* Sayap kiri */
+  transform: rotate(-20deg);
+}
+
+.bird::after {
+  content: '';
+  position: absolute;
+  left: 16px;
+  width: 12px;
+  height: 6px;
+  border-top: 3px solid rgba(255,255,255,0.7);
+  border-radius: 50% 50% 0 0 / 8px 8px 0 0;
+  transform: rotate(20deg);
+}
+
+/* Animasi burung terbang melintas */
+.bird-1 { top: 20%; animation: fly-across 8s ease-in-out 1s infinite; }
+.bird-2 { top: 25%; animation: fly-across 10s ease-in-out 3s infinite; transform: scale(0.7); }
+.bird-3 { top: 15%; animation: fly-across 12s ease-in-out 5s infinite; transform: scale(0.5); }
+
+@keyframes fly-across {
+  0%   { left: -60px; opacity: 0; transform: translateY(0); }
+  5%   { opacity: 1; }
+  50%  { transform: translateY(-20px); }
+  95%  { opacity: 1; }
+  100% { left: 110%; opacity: 0; }
+}
+
+/* ============================================
+   KUPU-KUPU (Butterfly Placeholder)
+   Ganti dengan <img src="../assets/butterfly.png">
+   ============================================ */
+.butterfly {
+  position: absolute;
+  z-index: 16;
+  animation: flutter-path 12s ease-in-out infinite;
+}
+
+.butterfly::before,
+.butterfly::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 24px;
+  background: rgba(255,200,100,0.6);
+  border-radius: 50% 0 50% 0;
+  animation: wing-flap 0.4s ease-in-out infinite alternate;
+}
+
+.butterfly::before {
+  right: 8px;
+  transform-origin: right center;
+}
+
+.butterfly::after {
+  left: 8px;
+  transform-origin: left center;
+  transform: scaleX(-1);
+}
+
+@keyframes wing-flap {
+  0%   { transform: rotateY(0deg); }
+  100% { transform: rotateY(60deg); }
+}
+
+@keyframes flutter-path {
+  0%   { top: 60%; left: 10%; opacity: 0; }
+  10%  { opacity: 1; }
+  25%  { top: 30%; left: 25%; }
+  50%  { top: 45%; left: 60%; }
+  75%  { top: 20%; left: 75%; }
+  90%  { opacity: 1; }
+  100% { top: 50%; left: 90%; opacity: 0; }
+}
+
+/* ============================================
+   KELOPAK JATUH / PETAL (Floating Petals)
+   Ganti .petal dengan <img src="../assets/petal.png">
+   ============================================ */
+.petal {
+  position: absolute;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.petal::before {
+  content: '';
+  display: block;
+  width: 12px;
+  height: 16px;
+  background: rgba(255,150,180,0.6);
+  border-radius: 50% 0 50% 0;
+  transform: rotate(45deg);
+}
+
+/* Tiap petal punya jalur berbeda */
+.petal-1  { animation: petal-fall 6s ease-in-out 0s infinite; left: 5%; }
+.petal-2  { animation: petal-fall 7s ease-in-out 1s infinite; left: 15%; }
+.petal-3  { animation: petal-fall 8s ease-in-out 2s infinite; left: 28%; }
+.petal-4  { animation: petal-fall 6.5s ease-in-out 3s infinite; left: 45%; }
+.petal-5  { animation: petal-fall 9s ease-in-out 0.5s infinite; left: 60%; }
+.petal-6  { animation: petal-fall 7.5s ease-in-out 2.5s infinite; left: 72%; }
+.petal-7  { animation: petal-fall 8.5s ease-in-out 4s infinite; left: 85%; }
+.petal-8  { animation: petal-fall 6s ease-in-out 1.5s infinite; left: 92%; }
+
+@keyframes petal-fall {
+  0%   { top: -20px; opacity: 0; transform: rotate(0deg) translateX(0); }
+  10%  { opacity: 0.8; }
+  50%  { transform: rotate(180deg) translateX(30px); }
+  90%  { opacity: 0.6; }
+  100% { top: 105vh; opacity: 0; transform: rotate(360deg) translateX(-20px); }
+}
+
+/* ============================================
+   TENGAH: PREVIEW TEXT & AMPLOP
+   ============================================ */
+#center-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 30;
+  text-align: center;
+  width: min(320px, 85vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Teks undangan di atas amplop */
+.preview-label {
+  color: #6495ed;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  animation: fade-float 2s ease-in-out infinite alternate;
+}
+
+.preview-title {
+  color: #6495ed;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  text-shadow: none;
+  animation: fade-float 2s ease-in-out 0.3s infinite alternate;
+}
+
+.preview-names {
+  color: #E1DBD0;
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(36px, 12vw, 64px);
+  font-style: normal;
+  line-height: 1.6;
+  text-shadow: none;
+  animation: fade-float 2s ease-in-out 0.6s infinite alternate;
+}
+
+@keyframes fade-float {
+  0%   { opacity: 0.7; transform: translateY(0); }
+  100% { opacity: 1; transform: translateY(-4px); }
+}
+
+/* ============================================
+   AMPLOP (Envelope) - Frame-based Animation
+   Frame 1-8 ada di folder assets/envelope/
+   Ganti .envelope-shape dengan img#envelope-img
+   ============================================ */
+#envelope-container {
+  position: relative;
+  width: min(320px, 70vw);
+  height: min(224px, 49vw);
+  cursor: pointer;
+  /* Animasi goyang sebelum diklik */
+  animation: envelope-idle 3s ease-in-out infinite;
+}
+
+/* Idle: amplop bergoyang / mengambang */
+@keyframes envelope-idle {
+  0%   { transform: translateY(0) rotate(0deg); }
+  20%  { transform: translateY(-8px) rotate(-2deg); }
+  40%  { transform: translateY(-4px) rotate(2deg); }
+  60%  { transform: translateY(-10px) rotate(-1deg); }
+  80%  { transform: translateY(-6px) rotate(1.5deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* Ketika diklik, stop idle dan mulai open */
+#envelope-container.opening {
+  animation: none;
+}
+
+/* Shape placeholder amplop (ganti dengan img frame-1.png dst) */
+#envelope-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block; /* Aktifkan saat ada gambar */
+}
+
+/* Placeholder amplop pakai CSS shapes */
+#envelope-placeholder {
+  width: 200px;
+  height: 140px;
+  position: relative;
+}
+
+.env-body {
+  position: absolute;
+  bottom: 0;
+  width: 200px;
+  height: 110px;
+  background: linear-gradient(135deg, #c8a870, #e8c890);
+  border-radius: 4px 4px 8px 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.env-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 100px solid transparent;
+  border-right: 100px solid transparent;
+  border-top: 65px solid #b8985e;
+  transform-origin: top center;
+  transition: transform 0.4s ease;
+  z-index: 2;
+}
+
+.env-flap-left {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-bottom: 70px solid #d4b07a;
+  border-right: 100px solid transparent;
+}
+
+.env-flap-right {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-bottom: 70px solid #c8a870;
+  border-left: 100px solid transparent;
+}
+
+.env-seal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px;
+  height: 36px;
+  background: radial-gradient(circle, #8b0000, #c0392b);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4), 0 0 0 2px rgba(255,215,0,0.5);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,215,0,0.8);
+  font-size: 16px;
+}
+
+/* Teks "Klik untuk membuka" */
+.envelope-hint {
+  color: rgba(255,255,255,0.6);
+  font-size: 12px;
+  letter-spacing: 2px;
+  animation: hint-blink 2s ease-in-out infinite;
+  margin-top: 8px;
+}
+
+@keyframes hint-blink {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 1; }
+}
+
+/* ============================================
+   OVERLAY AMPLOP ANIMASI BUKA (Frame 1-8)
+   ============================================ */
+#envelope-open-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+}
+
+#envelope-open-overlay.active {
+  pointer-events: all;
+}
+
+/* Container gambar frame */
+#frame-display {
+  width: 480px;
+  height: 336px;
+  position: relative;
+}
+
+/* Placeholder frame buka amplop */
+#frame-display img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+#frame-display img.visible {
+  opacity: 1;
+}
+
+/* Frame 8 terakhir = kertas undangan = transisi ke main */
+#frame-8 {
+  /* Ini adalah gambar kertas undangan yang muncul sebelum zoom */
+}
+
+/* ============================================
+   TRANSISI ZOOM + FADE KE HALAMAN UTAMA
+   ============================================ */
+#transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+#transition-overlay.active {
+  opacity: 1;
+}
+
+/* ============================================
+   HALAMAN UTAMA (MAIN PAGE)
+   Tersembunyi sampai transisi selesai
+   ============================================ */
+#main-page {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  background: #f8f3e8;
+  transition: opacity 0.8s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#main-page.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.main-content {
+  text-align: center;
+  padding: 40px;
+}
+
+.main-content h1 {
+  font-size: 48px;
+  color: #3d2010;
+  margin-bottom: 16px;
+}
+
+.main-content p {
+  color: #6b4226;
+  font-size: 18px;
+}
+
+/* ============================================
+   ANIMASI SWAY (pohon bergoyang)
+   ============================================ */
+@keyframes sway-left {
+  0%, 100% { transform: rotate(0deg); transform-origin: bottom center; }
+  25%       { transform: rotate(-3deg); transform-origin: bottom center; }
+  75%       { transform: rotate(2deg); transform-origin: bottom center; }
+}
+
+@keyframes sway-right {
+  0%, 100% { transform: rotate(0deg); transform-origin: bottom center; }
+  25%       { transform: rotate(3deg); transform-origin: bottom center; }
+  75%       { transform: rotate(-2deg); transform-origin: bottom center; }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 480px) {
+  #center-content { width: 280px; }
+  #envelope-container { width: 160px; height: 112px; }
+  .preview-names { font-size: 22px; }
+}
+
+/* ============================================
+   FLORAL RING — Pojok kiri atas & kanan bawah
+   ============================================ */
+.floral-ring {
+  position: absolute;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.floral-ring img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Pojok kiri atas — hanya tampil seperempat kanan bawah gambar */
+#floral-top-left {
+  width: 280px;
+  height: 280px;
+  top: -120px;      /* geser ke atas separuh */
+  left: -120px;     /* geser ke kiri separuh */
+  animation: spin-slow 25s linear infinite;
+  transform-origin: center center;
+}
+
+/* Pojok kanan bawah — hanya tampil seperempat kiri atas gambar */
+#floral-bottom-right {
+  width: 280px;
+  height: 280px;
+  bottom: -120px;   /* geser naik = kurangi minus, turun = tambah minus */
+  right: -120px;    /* geser kiri = tambah minus, kanan = kurangi minus */
+  animation: sway-floral 5s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes sway-floral {
+  0%   { transform: rotate(100deg); }
+  25%  { transform: rotate(85deg); }
+  75%  { transform: rotate(72deg); }
+  100% { transform: rotate(100deg); }
+}

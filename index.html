@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Undangan Digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    @keyframes envelope-shake {
+      0%, 100% { transform: rotate(0deg) translateY(0); }
+      20%       { transform: rotate(-5deg) translateY(-5px); }
+      40%       { transform: rotate(5deg) translateY(-8px); }
+      60%       { transform: rotate(-4deg) translateY(-4px); }
+      80%       { transform: rotate(3deg) translateY(-7px); }
+    }
+    #envelope-open-overlay {
+      background: radial-gradient(ellipse at center,
+        rgba(26,10,46,0.95) 0%,
+        rgba(10,4,20,0.98) 100%
+      );
+      transition: opacity 0.4s ease;
+    }
+    @keyframes float-slow {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%       { transform: translateY(-10px) scale(1.05); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SCENE PREVIEW -->
+<div id="scene">
+  <div id="bg-layer"></div>
+
+  <div id="panel-left">
+    <div class="panel-deco">
+      <div class="deco-tree"></div>
+      <div style="position:absolute;top:5%;bottom:5%;right:25%;width:1px;
+        background:linear-gradient(180deg,transparent 0%,rgba(180,140,60,0.4) 50%,transparent 100%);
+        animation:float-slow 5s ease-in-out 1s infinite;"></div>
+    </div>
+    <div class="panel-border"></div>
+  </div>
+
+  <div id="panel-right">
+    <div class="panel-deco">
+      <div class="deco-tree"></div>
+      <div style="position:absolute;top:5%;bottom:5%;left:25%;width:1px;
+        background:linear-gradient(180deg,transparent 0%,rgba(180,140,60,0.4) 50%,transparent 100%);
+        animation:float-slow 5s ease-in-out 3s infinite;"></div>
+    </div>
+    <div class="panel-border"></div>
+  </div>
+
+  <div id="center-content">
+    <div class="preview-title">THE WEDDING OF</div>
+    <div class="preview-names">Syariffudin<br> &amp;<br>Siti Zakiah</div>
+
+    <div id="envelope-container" title="Klik untuk membuka undangan">
+      <img id="envelope-img"
+           src="assets/img/envelope/frame1.webp"
+           alt="Amplop Undangan">
+      <div id="envelope-placeholder" style="display:none;">
+        <div class="env-body">
+          <div class="env-flap-left"></div>
+          <div class="env-flap-right"></div>
+          <div class="env-seal">♥</div>
+        </div>
+        <div class="env-flap"></div>
+      </div>
+    </div>
+
+    <div class="envelope-hint">✦ Sentuh untuk membuka ✦</div>
+  </div>
+
+</div><!-- /#scene -->
+
+<!-- Dekorasi bunga -->
+<div class="floral-ring" id="floral-top-left">
+  <img src="assets/img/floral-ring_L.webp" alt="">
+</div>
+<div class="floral-ring" id="floral-bottom-right">
+  <img src="assets/img/floral-ring_L2.png" alt="">
+</div>
+
+<!-- Overlay animasi amplop -->    
+<div id="envelope-open-overlay">
+  <div id="frame-display"></div>
+</div>
+
+<!-- Overlay transisi -->
+<div id="transition-overlay"></div>
+
+<!-- Main page — load dari iframe agar terpisah bersih -->
+<div id="main-page">
+</div>
+
+<script src="assets/js/jquery.3.4.1.slim.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script>
+  // Saat transisi selesai, fade in iframe
+  document.addEventListener('invitationOpen', () => {
+    const audio = document.getElementById("bg-music");
+    audio.volume = 0.2;
+    audio.play().catch(() => {
+        console.log("Autoplay diblokir browser");
+    });
+    const frame = document.getElementById('invitation-frame');
+    if (frame) frame.style.opacity = '1';
+  });
+
+  // Override triggerZoomTransition di main.js
+  // agar setelah transisi menampilkan iframe bukan div statis
+  window.onInvitationReady = function() {
+    const mainPage = document.getElementById('main-page');
+    if (mainPage) mainPage.classList.add('visible');
+    const frame = document.getElementById('invitation-frame');
+    if (frame) setTimeout(() => frame.style.opacity = '1', 300);
+  };
+
+  // Path asset untuk main.js
+  const ASSET_BASE = 'assets/img/';
+</script>
+<script src="assets/js/main.js"></script>
+
+<audio id="bg-music-preview" loop preload="auto">
+  <source src="assets/audio/music.mp3" type="audio/mpeg">
+</audio>
+
+</body>
+</html>
