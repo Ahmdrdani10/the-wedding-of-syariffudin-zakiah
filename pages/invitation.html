@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Undangan Pernikahan — Syariffudin & Siti Zakiah</title>
+  <title>The Wedding of Arif and Zakiah</title>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <link rel="apple-touch-icon" href="../assets/img/favicon.png">
   <style>
 /* =============================================
    INVITATION PAGE — GLOBAL
@@ -1490,6 +1492,25 @@ section {
    overflow: hidden;  /* clip memotong visual tapi tidak mempengaruhi scroll */
 }
 
+.btn-submit.sent {
+  background: var(--gold);
+  color: var(--bg-dark);
+  border-color: var(--gold);
+  cursor: default;
+  opacity: 0.85;
+}
+.btn-submit.sent {
+  background: var(--gold);
+  color: var(--bg-dark);
+  border-color: var(--gold);
+}
+
+.btn-submit.sent:hover {
+  background: var(--gold);
+  opacity: 0.85;
+}
+
+
   </style>
 </head>
 <body>
@@ -1638,11 +1659,6 @@ section {
       <strong>Bapak Rusliansyah</strong><br>
       &amp; <strong>Ibu Ratna</strong>
     </p>
-    <a href="https://instagram.com/instagram_pria" 
-   class="ig-link" 
-   target="_blank">
-    <img src="../assets/img/instagram.webp" alt="Instagram">
-</a>
   </div>
 
   <!-- Simbol pemisah -->
@@ -1688,11 +1704,6 @@ section {
       <strong>Bapak Abdul Gani</strong><br>
       &amp; <strong>Ibu Norbaiti</strong>
     </p>
-    <a href="https://www.instagram.com/za__kyaaa_a?igsh=cnQ1dDN2aTFlOXQ1" 
-   class="ig-link" 
-   target="_blank">
-    <img src="../assets/img/instagram.webp" alt="Instagram">
-</a>
   </div>
 
 </section>
@@ -1729,7 +1740,7 @@ section {
         Jl. Alabio Babirik Gang Kariwaya Indah No. 12
       </div>
       <a href="https://maps.google.com/?q=-2.504855,115.172544" target="_blank" class="btn-maps">
-        🗺 Buka Google Maps
+        Buka Google Maps
       </a>
     </div>
 
@@ -1752,7 +1763,7 @@ section {
         Jl. Kali Negara RT. 02
       </div>
       <a href="https://maps.google.com/?q=-2.501159,115.176318" target="_blank" class="btn-maps">
-        🗺 Buka Google Maps
+        Buka Google Maps
       </a>
     </div>
 
@@ -1774,7 +1785,7 @@ section {
         Jl. Alabio Babirik Gang Kariwaya Indah No. 12
       </div>
       <a href="https://maps.google.com/?q=-2.504855,115.172544" target="_blank" class="btn-maps">
-        🗺 Buka Google Maps
+        Buka Google Maps
       </a>
     </div>
 
@@ -2016,7 +2027,7 @@ section {
       <div class="gift-title">Kirim Hadiah</div>
       <div class="gift-detail">
         Nama Penerima : <strong>Siti Zakiah</strong><br>
-        No. HP : <strong>0878-1556-1559</strong><br>
+        No. HP : <strong>0878-1546-1559</strong><br>
         Jl. Alabio Babirik Gang Kariwaya Indah No. 12
       </div>
     </div>
@@ -2117,7 +2128,19 @@ const revealObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 // ---- RSVP ----
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyhh0q_aw96CCLny1gymWe8006n6-RT4j46nBTabvlFm7LKhOEv-W77fjKQIZJMomrKgw/exec'; // ← paste URL tadi
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyhh0q_aw96CCLny1gymWe8006n6-RT4j46nBTabvlFm7LKhOEv-W77fjKQIZJMomrKgw/exec';
+
+// Cek status RSVP saat halaman dibuka
+function checkRSVPStatus() {
+  const btn = document.querySelector('#rsvp-form .btn-submit');
+  if (!btn) return;
+
+  if (sessionStorage.getItem('rsvp_sent') === 'true') {
+    btn.textContent = '✓ Konfirmasi Terkirim';
+    btn.classList.add('sent');
+  }
+}
+document.addEventListener('DOMContentLoaded', checkRSVPStatus);
 
 function submitRSVP(e) {
   e.preventDefault();
@@ -2131,37 +2154,61 @@ function submitRSVP(e) {
 
   if (!nama) return;
 
-  // Disable tombol
+  // Jika sudah pernah terkirim, tanya apakah ingin kirim ulang
+  if (sessionStorage.getItem('rsvp_sent') === 'true') {
+    const ulang = confirm(
+      'Konfirmasi Anda sudah terkirim sebelumnya.\n\n' +
+      'Apakah ada yang ingin diperbaiki dan dikirim ulang?'
+    );
+    if (!ulang) return;
+
+    // Reset state agar bisa kirim ulang
+    sessionStorage.removeItem('rsvp_sent');
+    btn.textContent = 'Kirim Konfirmasi';
+    btn.classList.remove('sent');
+    msgEl.textContent = '';
+    return; // biarkan user isi ulang dulu, baru klik submit lagi
+  }
+
+  // State: sedang mengirim
   btn.disabled    = true;
   btn.textContent = 'Mengirim...';
   msgEl.textContent = '';
 
-  const payload = { nama, whatsapp, jumlah, kehadiran };
-
   fetch(APPS_SCRIPT_URL, {
     method: 'POST',
-    mode:   'no-cors', // wajib untuk Apps Script
+    mode:   'no-cors',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ nama, whatsapp, jumlah, kehadiran }),
   })
   .then(() => {
-    // no-cors tidak return response body, anggap sukses jika tidak error
-    msgEl.textContent = '✓ Konfirmasi berhasil terkirim, terima kasih!';
-    msgEl.style.color = 'var(--gold)';
-    document.getElementById('rsvp-form').reset();
+    // Simpan status sesi ini
+    sessionStorage.setItem('rsvp_sent', 'true');
 
-    // Opsional: kirim notif WA ke pasangan via Fonnte
-    // kirimNotifRSVP(nama, whatsapp, jumlah, kehadiran);
+    // Tombol berubah jadi "terkirim" tapi masih bisa diklik
+    btn.disabled    = false;
+    btn.textContent = '✓ Konfirmasi Terkirim';
+    btn.classList.add('sent');
+
+    msgEl.textContent = `Terima kasih ${nama}, konfirmasi Anda sudah kami terima!`;
+    msgEl.style.color  = 'var(--gold)';
+
+    document.getElementById('rsvp-form').reset();
   })
   .catch(err => {
+    btn.disabled    = false;
+    btn.textContent = 'Kirim Konfirmasi';
+    btn.classList.remove('sent');
     msgEl.textContent = '✗ Gagal terkirim, coba lagi.';
-    msgEl.style.color = '#e74c3c';
+    msgEl.style.color  = '#e74c3c';
     console.error('RSVP error:', err);
   })
   .finally(() => {
-    btn.disabled    = false;
-    btn.textContent = 'Kirim Konfirmasi';
-    setTimeout(() => msgEl.textContent = '', 5000);
+    setTimeout(() => {
+      if (sessionStorage.getItem('rsvp_sent') !== 'true') {
+        msgEl.textContent = '';
+      }
+    }, 5000);
   });
 }
 
