@@ -2256,7 +2256,8 @@ function renderGuestbook() {
 renderGuestbook();
 
 function submitGuestbook(e) {
-  e.preventDefault();
+  e.preventDefault();  // ← ini yang mencegah refresh
+
   const name  = document.getElementById('gb-name').value.trim();
   const msg   = document.getElementById('gb-msg').value.trim();
   const msgEl = document.getElementById('gb-message');
@@ -2264,66 +2265,29 @@ function submitGuestbook(e) {
 
   if (!name || !msg) return;
 
-  // Disable tombol saat proses kirim
   btn.disabled    = true;
-  btn.textContent = 'Mengirim...';
-  msgEl.textContent = '';
+  btn.textContent = 'Menyimpan...';
 
-  const waNumber = '6287815461559'; // ← nomor WA pasangan
-  const waText   =
-    `✨ *Ucapan Tamu Undangan* ✨\n\n` +
-    `👤 Nama  : ${name}\n` +
-    `💬 Pesan :\n"${msg}"\n\n` +
-    `📅 ${new Date().toLocaleDateString('id-ID', {
-      weekday: 'long', day: 'numeric',
-      month: 'long',  year: 'numeric'
-    })}`;
+const entry = {
+  name, msg,
+  date: new Date().toLocaleDateString('id-ID', {
+    day: 'numeric', month: 'long', year: 'numeric'
+  }) + ' ' + new Date().toLocaleTimeString('id-ID', {
+    hour: '2-digit', minute: '2-digit'
+  })
+};
 
-  // Kirim via Fonnte
-  fetch('https://api.fonnte.com/send', {
-    method: 'POST',
-    headers: {
-      'Authorization': 's6hEJHAq2ZWxQS578iAh', // ← isi token Fonnte
-    },
-    body: new URLSearchParams({
-      target:  waNumber,
-      message: waText,
-      countryCode: '62',
-    })
-  })
-  .then(r => r.json())
-  .then(data => {
-    if (data.status === true) {
-      // Berhasil — simpan ke localStorage & tampilkan
-      const entry = {
-        name, msg,
-        date: new Date().toLocaleDateString('id-ID', {
-          day: 'numeric', month: 'long', year: 'numeric'
-        })
-      };
-      guestbookEntries.push(entry);
-      localStorage.setItem('gb_entries', JSON.stringify(guestbookEntries));
-      renderGuestbook();
+  guestbookEntries.push(entry);
+  localStorage.setItem('gb_entries', JSON.stringify(guestbookEntries));
+  renderGuestbook();
 
-      msgEl.textContent = '✓ Ucapan berhasil terkirim!';
-      msgEl.style.color = 'var(--gold)';
-      document.getElementById('gb-form').reset();
-    } else {
-      msgEl.textContent = '✗ Gagal terkirim, coba lagi.';
-      msgEl.style.color = '#e74c3c';
-      console.error('Fonnte error:', data);
-    }
-  })
-  .catch(err => {
-    msgEl.textContent = '✗ Koneksi gagal, coba lagi.';
-    msgEl.style.color = '#e74c3c';
-    console.error('Fetch error:', err);
-  })
-  .finally(() => {
-    btn.disabled    = false;
-    btn.textContent = 'Kirim Ucapan';
-    setTimeout(() => msgEl.textContent = '', 4000);
-  });
+  msgEl.textContent = '✓ Ucapan terkirim!';
+  msgEl.style.color = 'var(--gold)';
+  document.getElementById('gb-form').reset();
+
+  btn.disabled    = false;
+  btn.textContent = 'Kirim Ucapan';
+  setTimeout(() => msgEl.textContent = '', 600000);
 }
 
 // ---- MUSIC ----
